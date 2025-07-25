@@ -1,36 +1,35 @@
-name: Unzip ZIP file
+name: Force Unzip Always
 
 on:
   push:
-    paths:
-      - 'source-main.zip'
+    branches:
+      - main
 
 jobs:
   unzip:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: List files before unzip
-      run: ls -la
+    - name: Create folder if not exist
+      run: mkdir -p Tepthon/plugins/
 
-    - name: Unzip the file
+    - name: Unzip file if exists
       run: |
         if [ -f "source-main.zip" ]; then
-          unzip -o source-main.zip -d ./
+          unzip -o source-main.zip -d Tepthon/plugins/
         else
-          echo "❌ File not found: source-main.zip"
-          exit 1
+          echo "No ZIP file to unzip."
         fi
 
     - name: Commit unzipped files
       run: |
-        git config --global user.name "github-actions"
-        git config --global user.email "github-actions@github.com"
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
         git add .
-        git commit -m "✅ Unzipped source-main.zip"
+        git commit -m "Unzipped source-main.zip"
         git push
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
