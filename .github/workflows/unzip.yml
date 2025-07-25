@@ -1,9 +1,9 @@
-name: Unzip source-main.zip
+name: Force Unzip Always
 
 on:
   push:
-    paths:
-      - source-main.zip
+    branches:
+      - main
 
 jobs:
   unzip:
@@ -13,8 +13,13 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Unzip source-main.zip
-      run: unzip -o source-main.zip -d ./
+    - name: Unzip file if exists
+      run: |
+        if [ -f "source-main.zip" ]; then
+          unzip -o source-main.zip -d ./
+        else
+          echo "No ZIP file to unzip."
+        fi
 
     - name: Commit unzipped files
       run: |
