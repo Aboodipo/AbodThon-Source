@@ -6,26 +6,29 @@ on:
       - main
 
 jobs:
-  unzip:
+  unzip_job:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Unzip if file exists
+      - name: Unzip file
         run: |
-          if [ -f "plugins.zip" ]; then
-            unzip -o plugins.zip -d Tepthon/plugins/
+          unzip path/to/your-archive.zip -d Tepthon/plugins/
+
+      - name: List contents of plugins folder
+        run: ls -la Tepthon/plugins/
+
+      - name: Commit and push unzipped files
+        run: |
+          if [ -d Tepthon/plugins ]; then
+            git config --global user.name "github-actions"
+            git config --global user.email "github-actions@github.com"
+            git add Tepthon/plugins/
+            git commit -m "Add unzipped plugins"
+            git push
+          else
+            echo "❌ Folder Tepthon/plugins/ not found!"
+            exit 1
           fi
-
-      - name: Setup Git identity
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-
-      - name: Commit unzipped files
-        run: |
-          git add Tepthon/plugins/
-          git commit -m "Auto unzip plugins" || echo "No changes to commit"
-          git push
