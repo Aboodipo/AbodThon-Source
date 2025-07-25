@@ -10,25 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-    - name: Unzip file if exists
-      run: |
-        if [ -f "source-main.zip" ]; then
-          unzip -o source-main.zip -d temp/
-          mv temp/source-main/* .
-          rm -rf temp/
-        else
-          echo "No ZIP file to unzip."
-        fi
+      - name: Unzip if file exists
+        run: |
+          if [ -f "plugins.zip" ]; then
+            unzip -o plugins.zip -d Tepthon/plugins/
+          fi
 
-    - name: Commit unzipped files
-      run: |
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
-        git add .
-        git commit -m "Unzipped and moved contents from source-main.zip"
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Git identity
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Commit unzipped files
+        run: |
+          git add Tepthon/plugins/
+          git commit -m "Auto unzip plugins" || echo "No changes to commit"
+          git push
