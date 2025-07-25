@@ -8,7 +8,7 @@ services:
     plan: free
     name: Ohs
     env: python
-    repo: https://github.com/Ahmadow6/source
+    repo: 
     buildCommand: pip install -U -r requirements.txt
     startCommand: python3 server.py & python3 -m Tepthon
     region: frankfurt
