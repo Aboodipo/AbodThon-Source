@@ -28,7 +28,7 @@ jobs:
       run: |
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
-        git add .
+        git add Tepthon/plugins/
         git commit -m "Unzipped source-main.zip"
         git push
       env:
