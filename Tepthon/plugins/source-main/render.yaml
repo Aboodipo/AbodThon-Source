@@ -3,22 +3,21 @@ databases:
     ipAllowList: []
     region: frankfurt
     plan: free
-
 services:
   - type: web
     plan: free
     name: Ohs
     env: python
-    repo: https://github.com/Aboodipo/AbodThon-Source
+    repo: https://github.com/Ahmadow6/source
     buildCommand: pip install -U -r requirements.txt
     startCommand: python3 server.py & python3 -m Tepthon
     region: frankfurt
     envVars:
       - key: ALIVE_NAME
         sync: false
-      - key: API_HASH
+      - key: API_HASH 
         sync: false
-      - key: APP_ID
+      - key: APP_ID 
         sync: false
       - key: ENV
         value: ANYTHING
@@ -33,4 +32,5 @@ services:
       - key: DATABASE_URL
         fromDatabase:
           name: Ohs
-          property: connectionString
+          property: connectionString  
+  
