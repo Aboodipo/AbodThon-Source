@@ -1,0 +1,27 @@
+name: Unzip source-main.zip
+
+on:
+  push:
+    paths:
+      - source-main.zip
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Unzip source-main.zip
+      run: unzip -o source-main.zip -d ./
+
+    - name: Commit unzipped files
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git add .
+        git commit -m "Unzipped source-main.zip"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
