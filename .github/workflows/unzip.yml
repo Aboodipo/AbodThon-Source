@@ -1,35 +1,33 @@
-name: Force Unzip Always
+name: Unzip and Move to Root
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'source-main.zip'
 
 jobs:
   unzip:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Create folder if not exist
-      run: mkdir -p Tepthon/plugins/
+      - name: Unzip into temp folder
+        run: |
+          unzip source-main.zip -d temp
 
-    - name: Unzip file if exists
-      run: |
-        if [ -f "source-main.zip" ]; then
-          unzip -o source-main.zip -d Tepthon/plugins/
-        else
-          echo "No ZIP file to unzip."
-        fi
+      - name: Move files to root
+        run: |
+          FOLDER=$(ls temp)
+          shopt -s dotglob
+          mv temp/$FOLDER/* .
+          rm -rf temp
 
-    - name: Commit unzipped files
-      run: |
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
-        git add Tepthon/plugins/
-        git commit -m "Unzipped source-main.zip"
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git commit -m "Unzipped and moved contents to root"
+          git push
