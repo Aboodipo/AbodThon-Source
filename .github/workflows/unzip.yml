@@ -1,20 +1,14 @@
-name: Unzip to Root
+# غيّر اسم المجلد حسب اسم مجلدك اللي فيه الملفات (مثلاً: source_folder)
+FOLDER="Tepthon/plugins/source-main"
 
-on:
-  push:
-    paths:
-      - 'source-main.zip'
+# التأكد أن المجلد موجود
+if [ -d "$FOLDER" ]; then
+  # نقل كل الملفات والمجلدات من داخل المجلد إلى الجذر
+  mv "$FOLDER"/* . 
+  mv "$FOLDER"/.* . 2>/dev/null || true
 
-jobs:
-  unzip:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Unzip to root
-        run: |
-          unzip -o source-main.zip -d temp
-          shopt -s dotglob
-          mv temp/* .
-          rm -r temp
+  # حذف المجلد بعد النقل (اختياري)
+  rm -rf "$FOLDER"
+else
+  echo "المجلد $FOLDER غير موجود."
+fi
